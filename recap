@@ -257,14 +257,19 @@ print_netstat_sum() {
 print_mysql() {
 	for cnf in $DOTMYDOTCNF
 	do
-        echo "MySQL $cnf status" >> $MYSQL_FILE
-        if [ -d /etc/psa/.psa.shadow ]
-        then
-                mysqladmin -uadmin -p`cat /etc/psa/.psa.shadow` --defaults-extra-file=$cnf status >> $MYSQL_FILE
-        else
-	            mysqladmin --defaults-extra-file=$cnf status >> $MYSQL_FILE
-        fi
-    done
+		if [ -f $cnf ]
+		then
+        		echo "MySQL $cnf status" >> $MYSQL_FILE
+        		if [ -d /etc/psa/.psa.shadow ]
+        		then
+	                	mysqladmin -uadmin -p`cat /etc/psa/.psa.shadow` --defaults-extra-file=$cnf status >> $MYSQL_FILE
+	        	else
+		        	    mysqladmin --defaults-extra-file=$cnf status >> $MYSQL_FILE
+        		fi
+        	else
+        		echo "$cnf does not exist. Update DOTMYDOTCNF in /etc/recap" >> $MYSQL_FILE
+        	fi
+    	done
 	echo "MySQL status" >> $MYSQL_FILE
 }
 
