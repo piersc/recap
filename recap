@@ -264,7 +264,7 @@ print_mysql() {
         		then
 	                	mysqladmin -uadmin -p`cat /etc/psa/.psa.shadow` --defaults-extra-file=$cnf status >> $MYSQL_FILE
 	        	else
-		        	    mysqladmin --defaults-extra-file=$cnf status >> $MYSQL_FILE
+		        	mysqladmin --defaults-extra-file=$cnf status >> $MYSQL_FILE
         		fi
         	else
         		echo "$cnf does not exist. Update DOTMYDOTCNF in /etc/recap" >> $MYSQL_FILE
