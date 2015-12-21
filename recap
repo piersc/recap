@@ -267,7 +267,7 @@ print_mysql() {
 		        	mysqladmin --defaults-extra-file=$cnf status >> $MYSQL_FILE
         		fi
         	else
-        		echo "$cnf does not exist. Update DOTMYDOTCNF in /etc/recap" >> $MYSQL_FILE
+        		echo "MySQL $cnf for STATUS does not exist. Update DOTMYDOTCNF in /etc/recap" >> $MYSQL_FILE
         	fi
     	done
 	echo "MySQL status" >> $MYSQL_FILE
@@ -315,13 +315,18 @@ print_mysql_innodb_status() {
 print_mysql_procs() {
 	for cnf in $DOTMYDOTCNF
     	do
+    		if [ -f $cnf ]
+    		then
 			echo "MySQL $cnf processes" >> $MYSQL_FILE
-	        if [ -d /etc/psa/.psa.shadow ]
-	        then
-	                mysqladmin -uadmin -p`cat /etc/psa/.psa.shadow` --defaults-extra-file=$cnf -v processlist >> $MYSQL_FILE
-	        else
+	        	if [ -d /etc/psa/.psa.shadow ]
+	        	then
+	                	mysqladmin -uadmin -p`cat /etc/psa/.psa.shadow` --defaults-extra-file=$cnf -v processlist >> $MYSQL_FILE
+	        	else
 		        	mysqladmin --defaults-extra-file=$cnf -v processlist >> $MYSQL_FILE
-	        fi
+	        	fi
+	        else
+	        	echo "MySQL $cnf for PROCESSLIST does not exist. Update DOTMYDOTCNF in /etc/recap" >> $MYSQL_FILE
+        	fi
         done
 	echo "MySQL processes" >> $MYSQL_FILE
 	if [ $MYSQL_PROCESS_LIST == "vertical" ]
